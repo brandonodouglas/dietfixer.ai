@@ -17,86 +17,8 @@ class MyApp extends StatelessWidget {
   }
 }
 
-// The barcode scanner screen
-class BarcodeScannerScreen extends StatefulWidget {
-  const BarcodeScannerScreen({super.key});
 
-  @override
-  State<BarcodeScannerScreen> createState() => _BarcodeScannerScreenState();
-}
 
-class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
-  String barcodeRes = 'Please point the camera at a valid barcode';
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Scan Your Food',
-          style: TextStyle(color: Colors.white),
-        ),
-
-        backgroundColor: Colors.blue,
-      ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          Expanded(
-            child: MobileScanner(
-              onDetect: (BarcodeCapture capture) {
-                final List<Barcode> barcodes = capture.barcodes;
-                if (barcodes.isNotEmpty && barcodes.first.rawValue != null) {
-                  setState(() {
-                    barcodeRes = barcodes.first.rawValue!;
-                    // The barcode is stored in the variable barcodeRes
-                    // TODO: sentbarcode to open food api
-
-                    print('The barcode is: $barcodeRes');
-                    // This button goes to the new screen of the app
-                    ElevatedButton(
-                      child: Text('Evaluate Food'),
-                      onPressed:
-                          () => Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => FoodEvaluationScreen(),
-                            ),
-                          ),
-                    );
-                  });
-                }
-              },
-            ),
-          ),
-
-          Expanded(
-            child: Center(
-              child: Text(
-                'Your barcode: $barcodeRes',
-                style: TextStyle(
-                  backgroundColor: Colors.lightBlue,
-                  fontSize: 50,
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class FoodEvaluationScreen extends StatelessWidget {
-  const FoodEvaluationScreen({super.key, barcode});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(backgroundColor: Colors.redAccent, body: Text('barcode')),
-    );
-  }
-}
 
 // The landing-page/homescreen
 class MainApp extends StatelessWidget {
@@ -127,10 +49,11 @@ class MainApp extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              const Text('\nChange your diet, change your life...\n\n'),
+              const Text('\nChange your diet, change your life.'),
+              Text('Point camera at the food label and let the app do the work!', textAlign: TextAlign.center,),
               // Button for barcode scanner
               ElevatedButton(
-                child: const Text('Scan Barcode Via Camera'),
+                child: const Text('Scan Food Label'),
                 onPressed: () {
                   print('Scanner button pressed!');
                   // Scan camera/barcode somehow using the phones camera
@@ -139,17 +62,10 @@ class MainApp extends StatelessWidget {
                    * 
                    */
 
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => BarcodeScannerScreen(),
-                    ),
-                  );
+                
                 },
               ),
-              ElevatedButton(
-                child: const Text('Scan food label'),
-                onPressed: () {},
-              ),
+            
 
               // Button for OCR
             ],
